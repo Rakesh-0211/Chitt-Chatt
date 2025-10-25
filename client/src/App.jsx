@@ -13,7 +13,7 @@ const App = () => {
   return (
     <div
       className="min-h-screen bg-black bg-no-repeat bg-center bg-contain bg-fixed
-                 bg-[url('./src/assets/bgImage.svg')]"
+                 bg-[url('/bgImage.svg')]"
     >
       <Toaster />
       <Routes>
