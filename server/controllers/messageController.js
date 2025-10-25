@@ -1,7 +1,7 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 import cloudinary from "../lib/cloudinary.js";
-import { io,userSocketMap } from "../server.js";
+import { io, userSocketMap } from "../server.js";
 // Get all Users except logged-in one
 export const getUserForSidebar = async (req, res) => {
   try {
@@ -67,27 +67,30 @@ export const markMessageAsSeen = async (req, res) => {
 // Send message to selected user
 export const sendMessage = async (req, res) => {
   try {
-    const{text,image}=req.body;
-    const receiverId=req.params.id;
-    const senderId=req.user._id;
+    const { text, image } = req.body;
+    const receiverId = req.params.id;
+    const senderId = req.user._id;
     let imageUrl;
-    if(image){
-      const uploadResponse=await cloudinary.uploader.upload(image)
-      imageUrl=uploadResponse.secure_url
+    if (image) {
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
     }
-    const newMessage=await Message.create({
+    const newMessage = await Message.create({
       senderId,
       receiverId,
       text,
-      image:imageUrl
-    })
+      image: imageUrl,
+    });
     //Emit the new message to the receivers socket
-    const receiverSocketId=userSocketMap[receiverId];
-    if(receiverSocketId){
-      io.to(receiverId).emit("newMessage",newMessage)
+    const receiverSocketId = userSocketMap[receiverId];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
     }
-    res.json({success:true,newMessage})
-
+    const senderSocketId = userSocketMap[senderId];
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("newMessage", newMessage);
+    }
+    res.json({ success: true, newMessage });
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
