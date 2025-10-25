@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [authUser, setAuthUser] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [socket, setSocket] = useState([]);
+  const [socket, setSocket] = useState(null);
   // Check if user is authenticate and if so, set the user data and connect the socket
   const checkAuth = async () => {
     try {
@@ -86,9 +86,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["token"] = token;
+       checkAuth();
     }
-    checkAuth();
-  }, []);
+  }, [token]);
 
   const value = {
     axios,
