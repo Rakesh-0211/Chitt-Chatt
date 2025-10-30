@@ -15,7 +15,7 @@ ChitChatt is a real-time chat web application built with the MERN stack (MongoDB
 
 **Frontend:** React, Vite, Tailwind CSS, ShadCN UI  
 **Backend:** Node.js, Express.js, MongoDB, Socket.io  
-**Deployment:** Vercel (Frontend), Render/Other (Backend)
+**Deployment:** Vercel
 
 ## 🌐 Deployed Project
 
